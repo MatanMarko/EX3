@@ -48,4 +48,22 @@ namespace ariel {
         return os;
     }
 
+    string Spot::dice_hit(unsigned int dice) {
+        for (unsigned int i = 0; i < numbers.size(); i++) {
+            if (numbers[i] == dice) {
+                return resources[i];
+            }
+        }
+        return "none";
+    }
+
+    bool Spot::adj_spot(Spot &spot) {
+        for (unsigned int i = 0; i < neighbors.size(); i++) {
+            if (neighbors[i] == spot.id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

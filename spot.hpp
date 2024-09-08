@@ -24,6 +24,8 @@ namespace ariel {
         string get_owner();
         void set_id(unsigned int new_id);
         friend std::ostream& operator<<(std::ostream& os, const Spot& spot);
+        string dice_hit(unsigned int dice);
+        bool adj_spot(Spot &spot);
 
         string get_resource(unsigned int i);
     };

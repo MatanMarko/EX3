@@ -112,6 +112,7 @@ namespace ariel {
     }
     
     void Board::printBoard(){
+        cout << "\n";
         cout << "            " << spots[0] << spots[1] << spots[2] << endl;
         cout << "           "<<print_road(edges[0],"/   ")<<print_road(edges[1],"\\   ")<<print_road(edges[2], "/   ")<<print_road(edges[3], "\\   ")<<print_road(edges[4], "/   ")<<print_road(edges[5] ,"\\   ") << endl;
         cout << "        " << spots[3] << spots[4] << spots[5] << spots[6] << endl;

@@ -1,3 +1,6 @@
+// Matan Markovits 322318080
+// Matanmarkovits@gmail.com
+
 #pragma once
 #include <iostream>
 #include <stdexcept>
@@ -8,6 +11,7 @@ using namespace std;
 
 namespace ariel
 {
+    int ariel::Player::playerCounter = 0;
     class Player
     {
     private:
@@ -26,7 +30,18 @@ namespace ariel
         static int playerCounter;
 
     public:
-        Player(string name);
-        bool placeSettelemnt(int vertex, Board &board);
+        Player() = default;
+        Player(string name);    //constructor
+        ~Player();              //destructor
+
+        int getPoints();
+        string getName();
+        bool tradePlayers(int player1, int player2, string resource1, string resource2, int amount1, int amount2);
+        bool tradeBank(string resource1, string resource2, int amount1, int amount2); 
+        void printResources();
+        string getColor() { return playerColor; }
+        void addResource(string resource);
+        void addPoints(int points);
+
     };
 } // namespace ariel

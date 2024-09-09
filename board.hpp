@@ -1,3 +1,6 @@
+// Matan Markovits 322318080
+// Matanmarkovits@gmail.com
+
 #pragma once
 #include <iostream>
 #include <vector>
@@ -35,6 +38,7 @@ namespace ariel {
             void setOwner(unsigned int spot, string color);
             void printBoard();
             string printBoard(Edge &edge, string preview);
+            Spot& getSpot(unsigned int spotNum){return spots[spotNum];}
 
             
     };

@@ -1,14 +1,8 @@
-//placeSettelemnt
-//placeRoad
-//rollDice
-//endTurn
-//trade
-//buyDevelopmentCard
-//useDevelopmentCard
-//printPoints
-//printsResources
+// Matan Markovits 322318080
+// Matanmarkovits@gmail.com
 
 #include "player.hpp"
+#include "catan.hpp"
 
 namespace ariel
 {
@@ -27,7 +21,26 @@ namespace ariel
         this->playerColor = playerNumber == 1 ? "Red" : playerNumber == 2 ? "Blue" : "Green";
     }
 
-    bool placeSettlement(int vertex, Board &board){
-        return Catan.placeSettlement(vertex, board, this->playerNumber);
+    int Player::getPoints(){
+        return this->points;
+    }
+
+    string Player::getName(){
+        return this->name;
+    }
+
+    void Player::printResources(){
+        cout << "Player " << this->name << " has:" << endl;
+        for (auto const &resource : this->resources){
+            cout << resource.first << ": " << resource.second << endl;
+        }
+    }
+
+    void Player::addResource(string resource){
+        this->resources[resource]++;
+    }
+
+    void Player::addPoints(int points){
+        this->points += points;
     }
 }

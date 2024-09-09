@@ -1,3 +1,6 @@
+// Matan Markovits 322318080
+// Matanmarkovits@gmail.com
+
 #include "board.hpp"
 
 namespace ariel {

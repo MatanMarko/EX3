@@ -1,3 +1,6 @@
+// Matan Markovits 322318080
+// Matanmarkovits@gmail.com
+
 #pragma once
 #include <iostream>
 #include <vector>
@@ -26,7 +29,6 @@ namespace ariel {
         friend std::ostream& operator<<(std::ostream& os, const Spot& spot);
         string dice_hit(unsigned int dice);
         bool adj_spot(Spot &spot);
-
         string get_resource(unsigned int i);
     };
 }

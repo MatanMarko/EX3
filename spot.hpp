@@ -15,7 +15,7 @@ namespace ariel {
         vector<unsigned int> numbers;
         vector<unsigned int> neighbors;
         vector<string> roads;
-        string owner = "none";
+        string owner = "";
         unsigned int id;
         
     public:
@@ -32,5 +32,15 @@ namespace ariel {
         bool adj_spot(Spot &spot);
         string get_resource(unsigned int i);
         vector<string> get_adj_resources(){return resources;}
+        vector<unsigned int> getNeighbors(){ return neighbors; }
+        vector<string> getRoads(){ return roads; }
+        void setRoadOwner(string color, unsigned int i){ this->roads[i] = color; };
+        string getRoadOwner(unsigned int i){ return roads[i]; };
+
+        //operator overloading:
+        bool operator==(Spot &s)
+        {
+            return this->id == s.id;
+        }
     };
 }

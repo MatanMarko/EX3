@@ -45,6 +45,19 @@ namespace ariel
         int getNumber();
         int getRoadsNum() { return roads; }
         void addRoad() { roads++; }
+        int getResource(string resource);
+        void settlemenet_resources();
+        void road_resources();
+
+        //operator overloading:
+        bool operator==(const Player &p) const
+        {
+            return this->playerNumber == p.playerNumber;
+        }
+        bool operator!=(const Player &p) const
+        {
+            return !(*this == p);
+        }
 
     };
 } // namespace ariel

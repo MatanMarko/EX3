@@ -13,11 +13,9 @@ namespace ariel
     class Catan
     {
     private:
-        Player p1;
-        Player p2;
-        Player p3;
+        vector<Player*> players;
         Board board;
-        int turn;
+        unsigned int turn = 0;
         //vector<DevCard> deck;
 
     public:
@@ -28,10 +26,12 @@ namespace ariel
         Board getBoard();
         Player& getPlayer(int playerNumber);
         
-        bool placeSettlement_test(int vertex, int playerNumber);
+        //bool placeSettlement_test(int vertex, int playerNumber);
+        bool placeSettlement(Player& p);
         bool placeSettlement_startGame(int vertex, int playerNumber);
 
-        bool placeRoad_test(int src, int dest, Player& p);
+        //bool placeRoad_test(int src, int dest, Player& p);
+        bool placeRoad(Player& p);
         bool placeRoad_startGame(int src, int dest, Player& p);
 
         void endTurn();

@@ -11,7 +11,7 @@ namespace ariel
     Player::Player(string name){    //constructor
         this->name = name;
         this->points = 0;
-        this->resources = {{"wood", 0}, {"brick", 0}, {"ore", 0}, {"wheat", 0}, {"wool", 0}};
+        this->resources = {{"Lumber", 4}, {"Brick", 4}, {"Ore", 0}, {"Grain", 2}, {"Wool", 2}};
         this->developmentCards = {{"bonus points", 0}, {"knight", 0}, {"road building", 0}, {"year of plenty", 0}, {"monopoly", 0}};
         this->settlements = 0;
         this->roads = 0;
@@ -39,6 +39,14 @@ namespace ariel
         }
     }
 
+    string Player::getColor(){
+        return this->playerColor;
+    }
+
+    int Player::getResource(string resource){
+        return this->resources[resource];
+    }
+
     void Player::addResource(string resource){
         this->resources[resource]++;
     }
@@ -49,5 +57,17 @@ namespace ariel
 
     int Player::getNumber(){
         return this->playerNumber;
+    }
+
+    void Player::settlemenet_resources(){
+        this->resources["wood"]--;
+        this->resources["brick"]--;
+        this->resources["wheat"]--;
+        this->resources["wool"]--;
+    }
+
+    void Player::road_resources(){
+        this->resources["wood"]--;
+        this->resources["brick"]--;
     }
 }

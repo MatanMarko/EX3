@@ -32,8 +32,8 @@ namespace ariel {
         else { return " "; }
     }
 
-    void Spot::set_owner(string new_owner) {
-        this->owner = new_owner;
+    void Spot::set_owner(string color) {
+        this->owner = color;
     }
 
     string Spot::get_owner() {

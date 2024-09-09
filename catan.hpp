@@ -28,8 +28,11 @@ namespace ariel
         Board getBoard();
         Player& getPlayer(int playerNumber);
         
-        bool placeSettlement(int vertex, string playerNumber);
-        bool placeRoad(int src, int dest, string playerNumber);
+        bool placeSettlement_test(int vertex, int playerNumber);
+        bool placeSettlement_startGame(int vertex, int playerNumber);
+
+        bool placeRoad_test(int src, int dest, Player& p);
+        bool placeRoad_startGame(int src, int dest, Player& p);
 
         void endTurn();
         int checkForWinner();
@@ -44,6 +47,7 @@ namespace ariel
 
         void printResources(int playerNumber);
         void resourceDistribution(int dice);
+        void firstDistribution(int vertex, Player& player);
         void printBoard();
         void addPoints(int playerNumber, int points);
     };

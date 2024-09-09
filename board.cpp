@@ -107,12 +107,25 @@ namespace ariel {
     Board::~Board() {}  //destructor
     Edge::~Edge() {}  //destructor
 
-    string print_road(Edge &edge, string preview) 
+    string Board::print_road(Edge &edge, string preview) 
     {
         if (edge.getOwner() == "none")  {return preview;}
-        else{return edge.getColor()+ preview + "\033[0m";  ;
+        else{return edge.getOwner()+ preview + "\033[0m";  ;
         }
     }
+
+    Edge* Board::getEdge(int src, int dest) {
+    // Loop through the edges to find the one that connects the two spots
+    for (Edge &edge : edges) {
+        // Check if the edge connects the two spots src and dest
+        if ((edge.getSource() == src && edge.getDestination() == dest) ||
+            (edge.getSource() == dest && edge.getDestination() == src)) {
+            return &edge;
+        }
+    }
+    // If no such edge is found, return nullptr or throw an exception
+    throw std::invalid_argument("No edge connects the given spots.");
+}
     
     void Board::printBoard(){
         cout << "\n";
@@ -140,5 +153,7 @@ namespace ariel {
         cout << "           "<<print_road(edges[66] ,"\\    ")<<print_road(edges[67] ,"/  ")<<print_road(edges[68] ,"\\    ")<<print_road(edges[69] ,"/  ")<<print_road(edges[70] ,"\\    ")<<print_road(edges[71] ,"/  ") << endl;
         cout << "            " << spots[51] << spots[52] << spots[53] << "\n\n--------------------------------------------------\n\n";
     }
+
+    
 
 }

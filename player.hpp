@@ -11,7 +11,7 @@ using namespace std;
 
 namespace ariel
 {
-    int ariel::Player::playerCounter = 0;
+    //int ariel::Player::playerCounter = 0;
     class Player
     {
     private:
@@ -42,6 +42,9 @@ namespace ariel
         string getColor() { return playerColor; }
         void addResource(string resource);
         void addPoints(int points);
+        int getNumber();
+        int getRoadsNum() { return roads; }
+        void addRoad() { roads++; }
 
     };
 } // namespace ariel

@@ -15,7 +15,7 @@ namespace ariel {
         vector<unsigned int> numbers;
         vector<unsigned int> neighbors;
         vector<string> roads;
-        string owner = "";
+        string owner = "none";
         unsigned int id;
         
     public:
@@ -26,9 +26,11 @@ namespace ariel {
         void set_owner(string new_owner);
         string get_owner();
         void set_id(unsigned int new_id);
+        unsigned int get_id(){return id;}
         friend std::ostream& operator<<(std::ostream& os, const Spot& spot);
         string dice_hit(unsigned int dice);
         bool adj_spot(Spot &spot);
         string get_resource(unsigned int i);
+        vector<string> get_adj_resources(){return resources;}
     };
 }

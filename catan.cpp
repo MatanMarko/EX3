@@ -9,8 +9,9 @@ namespace ariel
         this->p1 = p1;
         this->p2 = p2;
         this->p3 = p3;
+        vector<Player> players = {this->p1, this->p2, this->p3};
         this->board = Board();
-        this->turn = chooseStartingPlayer();
+        this->turn = 1;
     }
     Catan::~Catan(){}  //destructor
 
@@ -33,10 +34,80 @@ namespace ariel
         else {throw invalid_argument("Invalid player number");}
     }
 
-    /////////////////////////////////////////////////////////////////////
-    // bool placeSettlement(int vertex, string playerNumber);
-    // bool placeRoad(int src, int dest, string playerNumber);
-    //////////////////////////////////////////////////////////////////////
+    bool Catan::placeSettlement_test(int vertex, int playerNumber){
+        if (this->turn != playerNumber) {                   // Check if it's the player's turn
+            cout << "It's not your turn." << endl;
+            return false;
+        }
+        if (vertex < 0 || vertex > 53) {                    // Check if the vertex number is valid
+            cout << "Invalid vertex number." << endl;
+            return false;
+        }
+        if (board.getSpot(vertex).get_owner() != "none") {      // Check if the spot is already taken
+            cout << "This spot is already taken." << endl;
+            return false;
+        }
+        if(getPlayer(playerNumber).getPoints() < 2){        // Check check if it's the first two turns of the game (so he can place a settlement without a road)
+            return placeSettlement_startGame(vertex, playerNumber);
+        }
+        else{
+            // Check if the player has a road connected to the spot
+            // Check if the spot is connected to the player's settlement
+            // Check if the spot is not connected to another settlement
+            // Check if the spot is not connected to another road
+            // Check if the spot is not connected to another spot of the player
+        }
+        return true; ///////// change
+    }
+
+
+    bool Catan::placeSettlement_startGame(int vertex, int playerNumber){
+        if (board.getSpot(vertex).get_owner() != "none") {      // Check if the spot is already taken
+            cout << "This spot is already taken." << endl;
+            return false;
+        }
+        board.getSpot(vertex).set_owner(getPlayer(playerNumber).getName()); 
+        getPlayer(playerNumber).addPoints(1);
+
+        if(getPlayer(playerNumber).getPoints() == 2){      // If it's the second settlement, distribute resources
+            firstDistribution(vertex, getPlayer(playerNumber));
+        }
+        return true;
+    }
+
+    bool Catan::placeRoad_test(int src, int dest, Player& p){
+        if (this->turn != p.getNumber()) {                   // Check if it's the player's turn
+            cout << "It's not your turn." << endl;
+            return false;
+        }
+        if (src < 0 || src > 71 || dest < 0 || dest > 71) {                    // Check if the vertex number is valid
+            cout << "Invalid vertex number." << endl;
+            return false;
+        }
+        if (board.getSpot(src).adj_spot(board.getSpot(dest)) == false) {      // Check if the two spots are adjacent
+            cout << "These spots are not connected." << endl;
+            return false;
+        }
+        if (p.getPoints() <=2 && p.getRoadsNum()<=2){                       // check if its one of the two starter roads
+            return placeRoad_startGame(src, dest, p);
+        }
+        return true; ///////// change
+    }
+
+    bool Catan::placeRoad_startGame(int src, int dest, Player& p){
+        if (board.getSpot(src).get_owner() == p.getName() || board.getSpot(dest).get_owner() == p.getName()) {      // Check if one of the spots is connected to the player
+            if(board.getEdge(src, dest)->getOwner() == "none"){
+                board.getEdge(src, dest)->setOwner(p.getName());
+                p.addRoad();
+                return true;
+            }
+            else{
+                cout << "This road is already taken." << endl;
+                return false;
+            }
+        }
+        return true ; ///////// change
+    }
 
     void Catan::endTurn(){
         this->turn = (this->turn + 1) % 3;
@@ -108,6 +179,18 @@ namespace ariel
                     }
                 }
             }
+        }
+    }
+
+    void Catan::firstDistribution(int vertex, Player& player){
+        // Distribute resources to the player based on the second settlement
+        vector<string> resources = board.getSpot(vertex).get_adj_resources();
+        for(unsigned int i=0; i<resources.size(); i++){
+            if(resources[i] == "Lumber"){ player.addResource("Lumber"); }
+            if(resources[i] == "Brick"){ player.addResource("Brick"); }
+            if(resources[i] == "Wool"){ player.addResource("Wool"); }
+            if(resources[i] == "Ore"){ player.addResource("Ore"); }
+            if(resources[i] == "Grain"){ player.addResource("Grain"); }
         }
     }
 

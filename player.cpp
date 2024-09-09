@@ -6,7 +6,9 @@
 
 namespace ariel
 {
-    Player::Player(string name){
+    int Player::playerCounter = 0;
+
+    Player::Player(string name){    //constructor
         this->name = name;
         this->points = 0;
         this->resources = {{"wood", 0}, {"brick", 0}, {"ore", 0}, {"wheat", 0}, {"wool", 0}};
@@ -20,6 +22,7 @@ namespace ariel
         this->playerNumber = ++playerCounter;
         this->playerColor = playerNumber == 1 ? "Red" : playerNumber == 2 ? "Blue" : "Green";
     }
+    Player::~Player(){}  //destructor
 
     int Player::getPoints(){
         return this->points;
@@ -42,5 +45,9 @@ namespace ariel
 
     void Player::addPoints(int points){
         this->points += points;
+    }
+
+    int Player::getNumber(){
+        return this->playerNumber;
     }
 }

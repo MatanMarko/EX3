@@ -44,6 +44,10 @@
         "typeinfo": "cpp",
         "variant": "cpp",
         "algorithm": "cpp",
-        "map": "cpp"
-    }
+        "map": "cpp",
+        "__hash_table": "cpp",
+        "__tree": "cpp",
+        "unordered_map": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "enabled"
 }

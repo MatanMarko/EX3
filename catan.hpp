@@ -6,6 +6,7 @@
 #include <vector>
 #include "player.hpp"
 #include "board.hpp"
+#include <random>
 using namespace std;
 
 namespace ariel
@@ -16,7 +17,7 @@ namespace ariel
         vector<Player*> players;
         Board board;
         unsigned int turn = 0;
-        //vector<DevCard> deck;
+        vector<string> devCards;
 
     public:
         Catan(Player p1, Player p2, Player p3);     //constructor
@@ -26,29 +27,27 @@ namespace ariel
         Board getBoard();
         Player& getPlayer(int playerNumber);
         
-        //bool placeSettlement_test(int vertex, int playerNumber);
         bool placeSettlement(Player& p);
-        bool placeSettlement_startGame(int vertex, int playerNumber);
-
-        //bool placeRoad_test(int src, int dest, Player& p);
         bool placeRoad(Player& p);
-        bool placeRoad_startGame(int src, int dest, Player& p);
+        bool buildCity(Player& p);
 
-        void endTurn();
         int checkForWinner();
         void printPoints();
-
-        void buyDevelopmentCard(int playerNumber);
+        void addPoints(int playerNumber, int points);
 
         void shuffleDeck();
-
         void rollDice();
         void useDevelopmentCard(int playerNumber, string card);
 
         void printResources(int playerNumber);
         void resourceDistribution(int dice);
         void firstDistribution(int vertex, Player& player);
+
         void printBoard();
-        void addPoints(int playerNumber, int points);
+        void buyDevelopmentCard(Player& p);
+        bool useDevelopmentCard(Player& p, string card);
+
+        void endTurn();
+        
     };
 } // namespace ariel

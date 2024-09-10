@@ -2,19 +2,23 @@
 // Matanmarkovits@gmail.com
 
 #include "catan.hpp"
-
 namespace ariel
 {
     Catan::Catan(Player p1, Player p2, Player p3){
-        // this->p1 = p1;
-        // this->p2 = p2;
-        // this->p3 = p3;
-        //vector<Player> players = {this->p1, this->p2, this->p3};
         this->board = Board();
-        //this->turn = 1;
         this->players = {&p1, &p2, &p3};
+        devCards.insert(devCards.end(), 14, "Knight");
+        devCards.insert(devCards.end(), 5, "Victory point");
+        devCards.insert(devCards.end(), 2, "Road building");
+        devCards.insert(devCards.end(), 2, "Year of plenty");
+        devCards.insert(devCards.end(), 2, "Monopoly");
+        //shuffle the deck:
+        unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+        std::shuffle(devCards.begin(), devCards.end(), std::default_random_engine(seed)); // Replace 'shuffle' with 'std::shuffle'
     }
     Catan::~Catan(){}  //destructor
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     int chooseStartingPlayer() {
     // Return a random number between 1 and 3
@@ -24,20 +28,19 @@ namespace ariel
     return startPlayer;
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     Board Catan::getBoard(){
         return this->board;
     }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     Player& Catan::getPlayer(int playerNumber){
         return *players[playerNumber-1];
     }
 
-    // Player& Catan::getPlayer(int playerNumber){
-    //     if (playerNumber == 1) {return this->p1;}
-    //     else if (playerNumber == 2) {return this->p2;}
-    //     else if (playerNumber == 3) {return this->p3;}
-    //     else {throw invalid_argument("Invalid player number");}
-    // }
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     bool Catan::placeSettlement(Player& p){
         if(*players[turn] != p){
@@ -73,49 +76,8 @@ namespace ariel
         return true;
     }
 
-    // bool Catan::placeSettlement_test(int vertex, int playerNumber){
-    //     if (this->turn != playerNumber) {                   // Check if it's the player's turn
-    //         cout << "It's not your turn." << endl;
-    //         return false;
-    //     }
-    //     if (vertex < 0 || vertex > 53) {                    // Check if the vertex number is valid
-    //         cout << "Invalid vertex number." << endl;
-    //         return false;
-    //     }
-    //     if (board.getSpot(vertex).get_owner() != "none") {      // Check if the spot is already taken
-    //         cout << "This spot is already taken." << endl;
-    //         return false;
-    //     }
-    //     if(getPlayer(playerNumber).getPoints() < 2){        // Check check if it's the first two turns of the game (so he can place a settlement without a road)
-    //         return placeSettlement_startGame(vertex, playerNumber);
-    //     }
-    //     else{
-    //         // Check if the player has a road connected to the spot
-    //         // Check if the spot is connected to the player's settlement
-    //         // Check if the spot is not connected to another settlement
-    //         // Check if the spot is not connected to another road
-    //         // Check if the spot is not connected to another spot of the player
-    //     }
-    //     return true; ///////// change
-    // }
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-    // bool Catan::placeSettlement_startGame(int vertex, int playerNumber){
-    //     if (board.getSpot(vertex).get_owner() != "") {      // Check if the spot is already taken
-    //         cout << "This spot is already taken." << endl;
-    //         return false;
-    //     }
-    //     board.getSpot(vertex).set_owner(getPlayer(playerNumber).getName()); 
-    //     getPlayer(playerNumber).addPoints(1);
-
-    //     if(getPlayer(playerNumber).getPoints() == 2){      // If it's the second settlement, distribute resources
-    //         firstDistribution(vertex, getPlayer(playerNumber));
-    //     }
-    //     return true;
-    // }
-
-
-    //////////////////////////////////////////////////////////////////////
     bool Catan::placeRoad(Player& p){
         if(*players[turn] != p){
             cout << "Wait your turn " << p.getName() << endl;
@@ -208,44 +170,14 @@ namespace ariel
         return true;
     }
 
-    // bool Catan::placeRoad_test(int src, int dest, Player& p){
-    //     if (this->turn != p.getNumber()) {                   // Check if it's the player's turn
-    //         cout << "It's not your turn." << endl;
-    //         return false;
-    //     }
-    //     if (src < 0 || src > 71 || dest < 0 || dest > 71) {                    // Check if the vertex number is valid
-    //         cout << "Invalid vertex number." << endl;
-    //         return false;
-    //     }
-    //     if (board.getSpot(src).adj_spot(board.getSpot(dest)) == false) {      // Check if the two spots are adjacent
-    //         cout << "These spots are not connected." << endl;
-    //         return false;
-    //     }
-    //     if (p.getPoints() <=2 && p.getRoadsNum()<=2){                       // check if its one of the two starter roads
-    //         return placeRoad_startGame(src, dest, p);
-    //     }
-    //     return true; ///////// change
-    // }
-
-    // bool Catan::placeRoad_startGame(int src, int dest, Player& p){
-    //     if (board.getSpot(src).get_owner() == p.getName() || board.getSpot(dest).get_owner() == p.getName()) {      // Check if one of the spots is connected to the player
-    //         if(board.getEdge(src, dest)->getOwner() == ""){
-    //             board.getEdge(src, dest)->setOwner(p.getName());
-    //             p.addRoad();
-    //             return true;
-    //         }
-    //         else{
-    //             cout << "This road is already taken." << endl;
-    //             return false;
-    //         }
-    //     }
-    //     return true ; ///////// change
-    //}
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     void Catan::endTurn(){
         this->turn = (this->turn + 1) % 3;
         cout << "\nIt's " << getPlayer(this->turn).getName() << "'s turn." << endl;
     }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     int Catan::checkForWinner(){
         for (unsigned int i=0; i<players.size(); i++){
@@ -257,20 +189,15 @@ namespace ariel
         return 0;
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     void Catan::printPoints(){
         for (unsigned int i=0; i<players.size(); i++){
             cout << players[i]->getName() << " has " << players[i]->getPoints() << " points." << endl;
         }
     }
-    /////////////////////////////////////////////////////////////////////
-    // void buyDevelopmentCard(int playerNumber);
 
-    //void useDevelopmentCard(int playerNumber, string card){
-    //////////////////////////////////////////////////////////////////////
-
-    // void Catan::shuffleDeck(){
-    //     // Shuffle the deck of development cards
-    // }
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     void Catan::rollDice(){
         // Return a random number between 1 and 6 twice to keep the dice statistics
@@ -283,10 +210,14 @@ namespace ariel
         cout << getPlayer(this->turn).getName()<< " has rolled " << sum << endl;
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     void Catan::printResources(int playerNumber){
         cout << players[playerNumber-1]->getName() << " has:" << endl;
         players[playerNumber-1]->printResources();
     }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     void Catan::resourceDistribution(int dice){
         // Distribute resources to the players based on the dice roll
@@ -306,6 +237,8 @@ namespace ariel
         }
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     void Catan::firstDistribution(int vertex, Player& player){
         // Distribute resources to the player based on the second settlement
         vector<string> resources = board.getSpot(vertex).get_adj_resources();
@@ -318,9 +251,13 @@ namespace ariel
         }
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     void Catan::printBoard(){
         board.printBoard();
     }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     void Catan::addPoints(int playerNumber, int points){
         players[playerNumber-1]->addPoints(points);
@@ -329,7 +266,114 @@ namespace ariel
         }
     }
 
-    
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    void Catan::buyDevelopmentCard(Player& p){
+        if(*players[turn] != p){
+            cout << "Wait your turn " << p.getName() << endl;
+            cout << "It's your turn " << players[turn]->getName() << endl;
+            return;
+        }
+
+        if (devCards.size() == 0){
+            cout << "No more development cards" << endl;
+            return;
+        }
+
+        if(p.getResource("Ore") < 1 || p.getResource("Wool") < 1 || p.getResource("Grain") < 1){
+            cout << "Not enough resources" << endl;
+            return;
+        }
+        p.devCard_resources();
+        string card = devCards.back();
+        devCards.pop_back();
+        cout << "You got " << card << endl;
+        p.addDevCard(card);
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    bool Catan::useDevelopmentCard(Player& p, string card){
+        // Check if the player has the card
+        if (p.getDevCards()[card] == 0){
+            cout << "You don't have this card" << endl;
+            return false;
+        }
+
+        // Victory point card
+        if (card == "Victory point"){
+            p.addPoints(1);
+            p.getDevCards()[card]--;
+            return true;
+        }
+
+        // Knight card
+        if (card == "Knight"){
+            p.getDevCards()[card]--;
+            cout << "You have used a knight card, choose another player to get random resouce from him" << endl;
+            int playerNumber;
+            cin >> playerNumber;
+            if (playerNumber < 1 || playerNumber > 3){
+                cout << "No such player" << endl;
+                return false;
+            }
+            if (playerNumber == p.getNumber()){
+                cout << "You can't choose yourself" << endl;
+                return false;
+            }
+            string resource = getPlayer(playerNumber).getRobbed();
+            p.addResource(resource);
+            return true;
+        }
+
+        // Road building card
+        if (card == "Road building"){
+            p.getDevCards()[card]--;
+            cout << "You have used a road building card, place two roads" << endl;
+            placeRoad(p);
+            placeRoad(p);
+            return true;
+        }
+
+        // Year of plenty card
+        if (card == "Year of plenty"){
+            cout << "You have used a year of plenty card, choose two resources:" << endl;
+            cout << "Lumber, Brick, Wool, Ore, Grain" << endl;
+            string resource1, resource2;
+            cin >> resource1 >> resource2;
+            if(resource1 != "Lumber" && resource1 != "Brick" && resource1 != "Wool" && resource1 != "Ore" && resource1 != "Grain"){
+                cout << "No such resource / Wrong typing" << endl;
+                return false;
+            }
+            p.getDevCards()[card]--;
+            p.addResource(resource1);
+            p.addResource(resource2);
+            return true;
+        }
+
+        // Monopoly card
+        // if (card == "Monopoly"){
+        //     cout << "You have used a monopoly card, choose a resource to take from all players:" << endl;
+        //     cout << "Lumber, Brick, Wool, Ore, Grain" << endl;
+        //     string resource;
+        //     cin >> resource;
+        //     if(resource != "Lumber" && resource != "Brick" && resource != "Wool" && resource != "Ore" && resource != "Grain"){
+        //         cout << "No such resource / Wrong typing" << endl;
+        //         return false;
+        //     }
+        //     for (unsigned int i=0; i<players.size(); i++){
+        //         if (players[i]->getNumber() != p.getNumber()){
+        //             players[i]->getResource(resource) = 0;
+        //             p.resources[resource] += players[i]->resources[resource];
+        //         }
+        //     }
+        //     p.getDevCards()[card]--;
+        //     return true;
+        // }
+
+        return false;
+
+    }
 
     
-} // namespace ariel
+} // namespace ariel;

@@ -41,7 +41,7 @@ namespace ariel {
         spots[4].setSpot({resources[0], resources[1]}, {10, 2}, {0,1,8}, 4);
         spots[5].setSpot({resources[1], resources[2]}, {2, 9}, {1,2,9}, 5);
         spots[6].setSpot({resources[2]}, {9}, {2,10}, 6);
-        spots[7].setSpot({resources[3], resources[0]}, {10, 12}, {3,11,12}, 7);
+        spots[7].setSpot({resources[3], resources[0]}, {12, 10}, {3,11,12}, 7);
         spots[8].setSpot({resources[4], resources[1], resources[0]}, {6, 10, 2}, {4,12,13}, 8);
         spots[9].setSpot({resources[5], resources[2], resources[1]}, {4, 9, 2}, {5,13,14}, 9);
         spots[10].setSpot({resources[6], resources[2]}, {10,9}, {6,14,15}, 10);

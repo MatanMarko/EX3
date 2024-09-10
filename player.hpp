@@ -46,8 +46,18 @@ namespace ariel
         int getRoadsNum() { return roads; }
         void addRoad() { roads++; }
         int getResource(string resource);
+
         void settlemenet_resources();
         void road_resources();
+        void devCard_resources();
+
+        void addDevCard(string card);
+        map<string, int> getDevCards() { return developmentCards; }
+        void printDevCards();
+        
+        string toIcon(string resource);
+        string getRobbed();
+        
 
         //operator overloading:
         bool operator==(const Player &p) const

@@ -100,19 +100,19 @@ namespace ariel
     // }
 
 
-    bool Catan::placeSettlement_startGame(int vertex, int playerNumber){
-        if (board.getSpot(vertex).get_owner() != "none") {      // Check if the spot is already taken
-            cout << "This spot is already taken." << endl;
-            return false;
-        }
-        board.getSpot(vertex).set_owner(getPlayer(playerNumber).getName()); 
-        getPlayer(playerNumber).addPoints(1);
+    // bool Catan::placeSettlement_startGame(int vertex, int playerNumber){
+    //     if (board.getSpot(vertex).get_owner() != "") {      // Check if the spot is already taken
+    //         cout << "This spot is already taken." << endl;
+    //         return false;
+    //     }
+    //     board.getSpot(vertex).set_owner(getPlayer(playerNumber).getName()); 
+    //     getPlayer(playerNumber).addPoints(1);
 
-        if(getPlayer(playerNumber).getPoints() == 2){      // If it's the second settlement, distribute resources
-            firstDistribution(vertex, getPlayer(playerNumber));
-        }
-        return true;
-    }
+    //     if(getPlayer(playerNumber).getPoints() == 2){      // If it's the second settlement, distribute resources
+    //         firstDistribution(vertex, getPlayer(playerNumber));
+    //     }
+    //     return true;
+    // }
 
 
     //////////////////////////////////////////////////////////////////////
@@ -130,7 +130,7 @@ namespace ariel
         while(true){
             cin >> src;
             cin >> dst;
-            if(src == 0 || dst == 0){ return false; }
+            if(src == 100 || dst == 100){ return false; }
             if(src < 0 || src > 53 || dst < 0 || dst > 53){
                 cout << "No such spot" << endl;
                 continue;
@@ -138,10 +138,10 @@ namespace ariel
             if(!board.getSpot(src).adj_spot(board.getSpot(dst))){
                 cout << "There's no road between " << src << " and " << dst << endl;
                 continue;
-            // }
-            // if(!board.getSpot(src).adj_spot(board.getSpot(dst))){
-            //     cout << "There's no road between " << src << " and " << dst << endl;
-            //     continue;
+            }
+            if(!board.getSpot(src).adj_spot(board.getSpot(dst))){
+                cout << "There's no road between " << src << " and " << dst << endl;
+                continue;
             }
             if(p.getColor() != board.getSpot(src).get_owner() && p.getColor() != board.getSpot(dst).get_owner()){
 
@@ -171,9 +171,11 @@ namespace ariel
                         }   
                     }
                 }
-                      
-                
             }
+
+            Edge* edge = board.getEdge(src, dst);  // Find the edge between the two spots
+            edge->setOwner(p.getColor());  // Set the road's owner to the player's color
+
             p.road_resources();
             vector<unsigned int> neighbors = this->board.getSpot(dst).getNeighbors();
             bool existingRoad = false;
@@ -220,20 +222,20 @@ namespace ariel
     //     return true; ///////// change
     // }
 
-    bool Catan::placeRoad_startGame(int src, int dest, Player& p){
-        if (board.getSpot(src).get_owner() == p.getName() || board.getSpot(dest).get_owner() == p.getName()) {      // Check if one of the spots is connected to the player
-            if(board.getEdge(src, dest)->getOwner() == "none"){
-                board.getEdge(src, dest)->setOwner(p.getName());
-                p.addRoad();
-                return true;
-            }
-            else{
-                cout << "This road is already taken." << endl;
-                return false;
-            }
-        }
-        return true ; ///////// change
-    }
+    // bool Catan::placeRoad_startGame(int src, int dest, Player& p){
+    //     if (board.getSpot(src).get_owner() == p.getName() || board.getSpot(dest).get_owner() == p.getName()) {      // Check if one of the spots is connected to the player
+    //         if(board.getEdge(src, dest)->getOwner() == ""){
+    //             board.getEdge(src, dest)->setOwner(p.getName());
+    //             p.addRoad();
+    //             return true;
+    //         }
+    //         else{
+    //             cout << "This road is already taken." << endl;
+    //             return false;
+    //         }
+    //     }
+    //     return true ; ///////// change
+    //}
 
     void Catan::endTurn(){
         this->turn = (this->turn + 1) % 3;
@@ -247,6 +249,7 @@ namespace ariel
                 return i+1;
             }
         }
+        return 0;
     }
 
     void Catan::printPoints(){

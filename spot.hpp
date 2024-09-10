@@ -22,7 +22,6 @@ namespace ariel {
         Spot();
         ~Spot();
         void setSpot(vector<string> type, vector<unsigned int> num, vector<unsigned int> neighbors);
-        friend std::ostream& operator<<(std::ostream& os, Spot& spot);    //operator overloading for printing
         void set_owner(string new_owner);
         string get_owner();
         void set_id(unsigned int new_id);
@@ -38,9 +37,7 @@ namespace ariel {
         string getRoadOwner(unsigned int i){ return roads[i]; };
 
         //operator overloading:
-        bool operator==(Spot &s)
-        {
-            return this->id == s.id;
-        }
+        bool operator==(Spot &s) {return this->id == s.id;}
+        friend std::ostream& operator<<(std::ostream& os, Spot& spot);    //operator overloading for printing
     };
 }

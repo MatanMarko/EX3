@@ -20,7 +20,7 @@ namespace ariel
         this->hasUsedDevelopmentCard = false;
         this->playerTurn = false;
         this->playerNumber = ++playerCounter;
-        this->playerColor = playerNumber == 1 ? "Red" : playerNumber == 2 ? "Blue" : "Green";
+        this->playerColor = playerNumber == 1 ? "\033[0;31m" : playerNumber == 2 ? "\033[0;33m" : "\033[0;34m";
     }
     Player::~Player(){}  //destructor
 
@@ -39,9 +39,9 @@ namespace ariel
         }
     }
 
-    string Player::getColor(){
-        return this->playerColor;
-    }
+    // string Player::getColor(){
+    //     return this->playerColor;
+    // }
 
     int Player::getResource(string resource){
         return this->resources[resource];

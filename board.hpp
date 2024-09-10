@@ -23,11 +23,11 @@ namespace ariel {
             Edge(Spot &spot1, Spot &spot2){
                 this->source = spot1.get_id();
                 this->destination = spot2.get_id();
-                this->owner = "none";
+                this->owner = "";
                 }
             ~Edge();
             string getOwner(){return owner;}
-            void setOwner(string new_owner){owner = new_owner;}
+            void setOwner(string new_owner) {this->owner = new_owner;}
             string getColor(){return color;}
             void setColor(string new_color){color = new_color;}
             int getNumber(){return number;}

@@ -107,11 +107,16 @@ namespace ariel {
     Board::~Board() {}  //destructor
     Edge::~Edge() {}  //destructor
 
+    // string Board::print_road(Edge &edge, string preview) 
+    // {
+    //     if (edge.getOwner() == "")  {return preview;}
+    //     else{return edge.getOwner()+ preview + "\033[0m";  ;
+    //     }
+    // }
+
     string Board::print_road(Edge &edge, string preview) 
     {
-        if (edge.getOwner() == "none")  {return preview;}
-        else{return edge.getOwner()+ preview + "\033[0m";  ;
-        }
+        return edge.getOwner() == "" ? preview : edge.getOwner() + preview + "\033[0m";
     }
 
     Edge* Board::getEdge(int src, int dest) {
@@ -124,7 +129,7 @@ namespace ariel {
         }
     }
     // If no such edge is found, return nullptr or throw an exception
-    throw std::invalid_argument("No edge connects the given spots.");
+    //throw std::invalid_argument("No edge connects the given spots.");
 }
     
     void Board::printBoard(){
@@ -154,6 +159,9 @@ namespace ariel {
         cout << "            " << spots[51] << spots[52] << spots[53] << "\n\n--------------------------------------------------\n\n";
     }
 
+    void Board::setOwner(unsigned int spot, string color) {
+        this->spots[spot].set_owner(color);
+    }
     
 
 }

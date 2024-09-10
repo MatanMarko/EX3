@@ -21,9 +21,9 @@ namespace ariel
         map<string, int> developmentCards;
         int settlements;
         int roads;
+        int knights;
         bool hasLongestRoad;
         bool hasLargestArmy;
-        bool hasUsedDevelopmentCard;
         bool playerTurn;
         int playerNumber;
         string playerColor;
@@ -33,6 +33,7 @@ namespace ariel
         Player() = default;
         Player(string name);    //constructor
         ~Player();              //destructor
+        bool playedDevCard = false;
 
         int getPoints();
         string getName();
@@ -46,6 +47,7 @@ namespace ariel
         int getRoadsNum() { return roads; }
         void addRoad() { roads++; }
         int getResource(string resource);
+        void setResource(string resource, int amount) { resources[resource] = amount; }
 
         void settlemenet_resources();
         void road_resources();
@@ -57,6 +59,7 @@ namespace ariel
         
         string toIcon(string resource);
         string getRobbed();
+        int getKnights() { return knights; }
         
 
         //operator overloading:

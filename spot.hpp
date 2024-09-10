@@ -16,6 +16,7 @@ namespace ariel {
         vector<unsigned int> neighbors;
         vector<string> roads;
         string owner = "";
+        string type = "";
         unsigned int id;
         
     public:
@@ -35,6 +36,7 @@ namespace ariel {
         vector<string> getRoads(){ return roads; }
         void setRoadOwner(string color, unsigned int i){ this->roads[i] = color; };
         string getRoadOwner(unsigned int i){ return roads[i]; };
+        void changeType(string newType){ this->type = newType; }
 
         //operator overloading:
         bool operator==(Spot &s) {return this->id == s.id;}

@@ -12,15 +12,16 @@ namespace ariel
         this->name = name;
         this->points = 0;
         this->resources = {{"Lumber", 4}, {"Brick", 4}, {"Ore", 0}, {"Grain", 2}, {"Wool", 2}};
-        this->developmentCards = {{"Victory point", 0}, {"knight", 0}, {"Road building", 0}, {"Year of plenty", 0}, {"Monopoly", 0}};
+        this->developmentCards = {{"Victory point", 0}, {"Knight", 0}, {"Road building", 0}, {"Year of plenty", 0}, {"Monopoly", 0}};
         this->settlements = 0;
         this->roads = 0;
         this->hasLongestRoad = false;
         this->hasLargestArmy = false;
-        this->hasUsedDevelopmentCard = false;
+        this->playedDevCard = false;
         this->playerTurn = false;
         this->playerNumber = ++playerCounter;
         this->playerColor = playerNumber == 1 ? "\033[0;31m" : playerNumber == 2 ? "\033[0;33m" : "\033[0;34m";
+        this->knights = 0;
     }
     Player::~Player(){}  //destructor
 
@@ -56,36 +57,42 @@ namespace ariel
     }
 
     void Player::settlemenet_resources(){
-        this->resources["wood"]--;
-        this->resources["brick"]--;
-        this->resources["wheat"]--;
-        this->resources["wool"]--;
+        this->resources["Lumber"]--;
+        this->resources["Brick"]--;
+        this->resources["Grain"]--;
+        this->resources["Wool"]--;
     }
 
     void Player::road_resources(){
-        this->resources["wood"]--;
-        this->resources["brick"]--;
+        this->resources["Lumber"]--;
+        this->resources["Brick"]--;
     }
 
     void Player::devCard_resources(){
-        this->resources["ore"]--;
-        this->resources["wool"]--;
-        this->resources["wheat"]--;
+        this->resources["Ore"]--;
+        this->resources["Wool"]--;
+        this->resources["Grain"]--;
     }
 
     void Player::addDevCard(string card){
         this->developmentCards[card]++;
+        if (card == "Knight"){
+            this->knights++;
+        }
     }
 
     void Player::printDevCards(){
+        if (this->developmentCards.empty()){
+            cout << "You have no development cards" << endl;
+            return;
+        }
         cout << "Player " << this->name << " has:" << endl;
         for (auto const &devCard : this->developmentCards){
             if (devCard.second > 0){ 
                 cout << devCard.first << ": " << devCard.second << endl;
-                return;
             }
         }
-        cout << "You have no development cards" << endl;
+        cout << "" << endl;
     }
 
     string Player::toIcon(string resource){
@@ -123,4 +130,5 @@ namespace ariel
         }
         return "";
     }
+
 } // namespace ariel

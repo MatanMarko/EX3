@@ -33,19 +33,19 @@ namespace ariel
 
         int checkForWinner();
         void printPoints();
-        void addPoints(int playerNumber, int points);
+        void addPoints(Player& p, int points);
 
         void shuffleDeck();
         void rollDice();
         void useDevelopmentCard(int playerNumber, string card);
 
-        void printResources(int playerNumber);
+        void printResources(Player& p);
         void resourceDistribution(int dice);
         void firstDistribution(int vertex, Player& player);
 
         void printBoard();
         void buyDevelopmentCard(Player& p);
-        bool useDevelopmentCard(Player& p, string card);
+        bool useDevelopmentCard(Player& p);
 
         void endTurn();
         

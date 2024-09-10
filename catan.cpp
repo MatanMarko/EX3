@@ -63,15 +63,16 @@ namespace ariel
                         if(board.getSpot(neighbors[i]).get_owner() != ""){
                             cout << "Can't place a settelment next to another settlement or city" << endl;
                             available = false;
-                            break; // breaks from for loop only
+                            break; // breaks from 'for' loop only
                         }
                     }
-                    if(available) { break; }
+                    if(available) { break; }    // breaks from 'while' loop
                 } else{ cout << "There's already a settlement" << endl;}
-            } else { cout << "You are out of bounds (1-54)" << endl; }
+            } else { cout << "You are out of bounds (0-53)" << endl; }
         }
         p.settlemenet_resources();
         board.setOwner(spot, p.getColor());
+        board.getSpot(spot).changeType("Settlement");
         p.addPoints(1);
         return true;
     }
@@ -90,15 +91,15 @@ namespace ariel
         }
         unsigned int src, dst;
         while(true){
-            cin >> src;
-            if (src == -1){ 
+            cin >> src >> dst;
+            if (src == -1 || dst == -1){ 
                 cout << "You decided not to build the road" << endl;
                 return false; }
-            cin >> dst;
-            if (src == -1){
-                cout << "You decided not to build the road" << endl;
-                return false; }
-
+            // cin >> dst;
+            // if (src == -1){
+            //     cout << "You decided not to build the road" << endl;
+            //     return false; }
+    
             if(src < 0 || src > 53 || dst < 0 || dst > 53){
                 cout << "No such spot" << endl;
                 continue;
@@ -140,10 +141,15 @@ namespace ariel
                     }
                 }
             }
-            Edge* edge = board.getEdge(src, dst);  // Find the edge between the two spots
-            edge->setOwner(p.getColor());  // Set the road's owner to the player's color
+            try {
+                Edge* edge = board.getEdge(src, dst);  // Find the edge between the two spots
+                edge->setOwner(p.getColor());  // Set the road's owner to the player's color
+            }   catch (std::invalid_argument& e) {
+                    cout << e.what() << endl;
+                    continue;
+                }
+            p.road_resources();     // Remove the resources from the player
 
-            p.road_resources();
             vector<unsigned int> neighbors = this->board.getSpot(dst).getNeighbors();
             bool existingRoad = false;
             for(unsigned int i=0; i<neighbors.size(); i++){
@@ -212,9 +218,9 @@ namespace ariel
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void Catan::printResources(int playerNumber){
-        cout << players[playerNumber-1]->getName() << " has:" << endl;
-        players[playerNumber-1]->printResources();
+    void Catan::printResources(Player& p){
+        cout << p.getName() << " has:" << endl;
+        p.printResources();
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -259,10 +265,10 @@ namespace ariel
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void Catan::addPoints(int playerNumber, int points){
-        players[playerNumber-1]->addPoints(points);
+    void Catan::addPoints(Player& p, int points){
+        p.addPoints(points);
         if (checkForWinner() != 0) {
-            this->turn = 0;
+            this->turn = 4;
         }
     }
 
@@ -293,86 +299,151 @@ namespace ariel
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    bool Catan::useDevelopmentCard(Player& p, string card){
+    bool Catan::useDevelopmentCard(Player& p){
+
+        if(*players[turn] != p){
+            cout << "Wait your turn " << p.getName() << ", you can only play development cards in your turn" << endl;
+            cout << "It's your turn " << players[turn]->getName() << endl;
+            return false;
+        }
+
+        p.printDevCards();
+        cout << "\nChoose a card to play:" << endl;
+        cout << "1 = Knight, 2 = Victory point, 3 = Road building, 4 = Year of plenty, 5 = Monopoly, (or 0 to cancel)" << endl;
+        int card;
+        cin >> card;
+        if (card == 0){
+            cout << "You decided not to play a card" << endl;
+            return false;
+        }
+        if (card < 1 || card > 5){
+            cout << "No such card\n" << endl;
+            return false;
+        }
+
+        string cardKey;
+        switch(card) {
+            case 1: cardKey = "Knight"; break;
+            case 2: cardKey = "Victory point"; break;
+            case 3: cardKey = "Road building"; break;
+            case 4: cardKey = "Year of plenty"; break;
+            case 5: cardKey = "Monopoly"; break;
+        }
+
         // Check if the player has the card
-        if (p.getDevCards()[card] == 0){
-            cout << "You don't have this card" << endl;
+        if (p.getDevCards()[cardKey] == 0){
+            cout << "You don't have that card" << endl;
             return false;
         }
 
         // Victory point card
-        if (card == "Victory point"){
+        if (card == 2){
             p.addPoints(1);
-            p.getDevCards()[card]--;
+            p.getDevCards()["victory point"]--;
+            cout << "You have used a victory point card, you got 1 point" << endl;
             return true;
         }
-
-        // Knight card
-        if (card == "Knight"){
-            p.getDevCards()[card]--;
-            cout << "You have used a knight card, choose another player to get random resouce from him" << endl;
-            int playerNumber;
-            cin >> playerNumber;
-            if (playerNumber < 1 || playerNumber > 3){
-                cout << "No such player" << endl;
-                return false;
+        // Check if the player has already played a dev card, only victory point can be played more than once
+        if (p.playedDevCard == false){
+            // Knight card
+            if (card == 1){
+                p.getDevCards()["Knight"]--;
+                cout << "You have used a knight card, choose another player to get random resouce from him" << endl;
+                int playerNumber;
+                cin >> playerNumber;
+                if (playerNumber < 1 || playerNumber > 3){
+                    cout << "No such player" << endl;
+                    return false;
+                }
+                if (playerNumber == p.getNumber()){
+                    cout << "You can't choose yourself" << endl;
+                    return false;
+                }
+                string resource = getPlayer(playerNumber).getRobbed();
+                p.addResource(resource);
+                return true;
             }
-            if (playerNumber == p.getNumber()){
-                cout << "You can't choose yourself" << endl;
-                return false;
+
+            // Road building card
+            if (card == 3){
+                p.getDevCards()["Road building"]--;
+                cout << "You have used a road building card, place two roads" << endl;
+                placeRoad(p);
+                placeRoad(p);
+                return true;
             }
-            string resource = getPlayer(playerNumber).getRobbed();
-            p.addResource(resource);
-            return true;
-        }
 
-        // Road building card
-        if (card == "Road building"){
-            p.getDevCards()[card]--;
-            cout << "You have used a road building card, place two roads" << endl;
-            placeRoad(p);
-            placeRoad(p);
-            return true;
-        }
-
-        // Year of plenty card
-        if (card == "Year of plenty"){
-            cout << "You have used a year of plenty card, choose two resources:" << endl;
-            cout << "Lumber, Brick, Wool, Ore, Grain" << endl;
-            string resource1, resource2;
-            cin >> resource1 >> resource2;
-            if(resource1 != "Lumber" && resource1 != "Brick" && resource1 != "Wool" && resource1 != "Ore" && resource1 != "Grain"){
-                cout << "No such resource / Wrong typing" << endl;
-                return false;
+            // Year of plenty card
+            if (card == 4){
+                cout << "You have used a year of plenty card, choose two resources:" << endl;
+                cout << "Lumber, Brick, Wool, Ore, Grain" << endl;
+                string resource1, resource2;
+                cin >> resource1 >> resource2;
+                if(resource1 != "Lumber" && resource1 != "Brick" && resource1 != "Wool" && resource1 != "Ore" && resource1 != "Grain"){
+                    cout << "No such resource / Wrong typing" << endl;
+                    return false;
+                }
+                p.getDevCards()["Year of plenty"]--;
+                p.addResource(resource1);
+                p.addResource(resource2);
+                return true;
             }
-            p.getDevCards()[card]--;
-            p.addResource(resource1);
-            p.addResource(resource2);
-            return true;
+
+            //Monopoly card
+            if (card == 5){
+                cout << "You have used a monopoly card, choose a resource to take from all players:" << endl;
+                cout << "Lumber, Brick, Wool, Ore, Grain" << endl;
+                string resource;
+                cin >> resource;
+                if(resource != "Lumber" && resource != "Brick" && resource != "Wool" && resource != "Ore" && resource != "Grain"){
+                    cout << "No such resource / Wrong typing" << endl;
+                    return false;
+                }
+                for (unsigned int i=0; i<players.size(); i++){
+                    if (players[i]->getColor() != p.getColor()){
+                        p.setResource(resource, p.getResource(resource) + (*players[i]).getResource(resource));
+                        players[i]->setResource(resource, 0);
+                    }
+                }
+                p.getDevCards()["Monopoly"]--;
+                return true;
+            }
         }
-
-        // Monopoly card
-        // if (card == "Monopoly"){
-        //     cout << "You have used a monopoly card, choose a resource to take from all players:" << endl;
-        //     cout << "Lumber, Brick, Wool, Ore, Grain" << endl;
-        //     string resource;
-        //     cin >> resource;
-        //     if(resource != "Lumber" && resource != "Brick" && resource != "Wool" && resource != "Ore" && resource != "Grain"){
-        //         cout << "No such resource / Wrong typing" << endl;
-        //         return false;
-        //     }
-        //     for (unsigned int i=0; i<players.size(); i++){
-        //         if (players[i]->getNumber() != p.getNumber()){
-        //             players[i]->getResource(resource) = 0;
-        //             p.resources[resource] += players[i]->resources[resource];
-        //         }
-        //     }
-        //     p.getDevCards()[card]--;
-        //     return true;
-        // }
-
         return false;
+    }
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    bool Catan::buildCity(Player& p){
+        if(*players[turn] != p){
+            cout << "Wait your turn " << p.getName() << endl;
+            cout << "It's your turn " << players[turn]->getName() << endl;
+            return false;
+        }
+
+        if(p.getResource("Ore") < 3 || p.getResource("Grain") < 2){
+            cout<< "not enough resources" << endl;
+            return false;
+        }
+
+        unsigned int spot;
+        while(true){
+            cin >> spot;
+            if (spot == -1){
+                cout << "You decided not to build the city" << endl;
+                return false;
+            }
+            if(spot >= 0 && spot <= 53){
+                if(board.getSpot(spot).get_owner() == p.getColor()){
+                    board.getSpot(spot).changeType("City");
+                    p.setResource("Ore", p.getResource("Ore") - 3);
+                    p.setResource("Grain", p.getResource("Grain") - 2);
+                    p.addPoints(1);
+                    return true;
+                } else{ cout << "You don't own this spot" << endl;}
+            } else { cout << "You are out of bounds (0-53)" << endl; }
+        }
+        return false;
     }
 
     

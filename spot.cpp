@@ -56,8 +56,11 @@ namespace ariel {
     std::ostream& operator<<(std::ostream& os, Spot& spot) {
         string spaces = "    ";
         if(spot.id < 10){ spaces = "     "; }
-        if (spot.owner != ""){
+        if (spot.owner != "" && spot.type == "Settlement") {
             os << spot.owner << "(⌂"<<to_string(spot.id)<<")" << DEFAULT << "   ";
+        }
+        else if (spot.owner != "" && spot.type == "City") {
+            os << spot.owner << "(⛫"<<to_string(spot.id)<<")" << DEFAULT << "   ";
         }
         else {os << spot.owner << "("<<to_string(spot.id)<<")" << DEFAULT << spaces;}
         return os;

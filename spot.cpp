@@ -10,12 +10,13 @@ namespace ariel {
 
     const std::string DEFAULT = "\033[0m";
 
-    void Spot::setSpot(vector<string> resources, vector<unsigned int> numbers, vector<unsigned int> neighbors) {
+    void Spot::setSpot(vector<string> resources, vector<unsigned int> numbers, vector<unsigned int> neighbors, unsigned int id) {
         this->resources = resources;
         this->numbers = numbers;
         this->neighbors = neighbors;
         vector<string> available_roads(neighbors.size(), "");
         this->roads = available_roads;
+        this->id = id;
     }
 
     // string Spot::get_resource(unsigned int i) {
@@ -44,10 +45,21 @@ namespace ariel {
         this->id = new_id;
     }
 
+    // std::ostream& operator<<(std::ostream& os, Spot& spot) {
+    //     string spaces = "    ";
+    //     if(spot.id < 10){ spaces = "     "; }
+    //     os << spot.owner << "("<<to_string(spot.id)<<")" << DEFAULT << spaces;
+    //     return os;
+    // }
+
+    /// ⌂ for settlement and ⛫ for city
     std::ostream& operator<<(std::ostream& os, Spot& spot) {
         string spaces = "    ";
         if(spot.id < 10){ spaces = "     "; }
-        os << spot.owner << "("<<to_string(spot.id)<<")" << DEFAULT << spaces;
+        if (spot.owner != ""){
+            os << spot.owner << "(⌂"<<to_string(spot.id)<<")" << DEFAULT << "   ";
+        }
+        else {os << spot.owner << "("<<to_string(spot.id)<<")" << DEFAULT << spaces;}
         return os;
     }
 

@@ -129,8 +129,14 @@ namespace ariel
         unsigned int src, dst;
         while(true){
             cin >> src;
+            if (src == -1){ 
+                cout << "You decided not to build the road" << endl;
+                return false; }
             cin >> dst;
-            if(src == 100 || dst == 100){ return false; }
+            if (src == -1){
+                cout << "You decided not to build the road" << endl;
+                return false; }
+
             if(src < 0 || src > 53 || dst < 0 || dst > 53){
                 cout << "No such spot" << endl;
                 continue;
@@ -172,7 +178,6 @@ namespace ariel
                     }
                 }
             }
-
             Edge* edge = board.getEdge(src, dst);  // Find the edge between the two spots
             edge->setOwner(p.getColor());  // Set the road's owner to the player's color
 

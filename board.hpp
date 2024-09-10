@@ -16,8 +16,8 @@ namespace ariel {
             string owner;
             int number;
             string color;
-            int source;
-            int destination;
+            unsigned int source;
+            unsigned int destination;
 
         public:
             Edge(Spot &spot1, Spot &spot2){
@@ -31,8 +31,8 @@ namespace ariel {
             string getColor(){return color;}
             void setColor(string new_color){color = new_color;}
             int getNumber(){return number;}
-            int getSource(){return source;}
-            int getDestination(){return destination;}
+            unsigned int getSource(){return source;}
+            unsigned int getDestination(){return destination;}
     };
 
     class Board {
@@ -47,7 +47,7 @@ namespace ariel {
             void printBoard();
             string printBoard(Edge &edge, string preview);
             Spot& getSpot(unsigned int spotNum){return spots[spotNum];}   
-            Edge* getEdge(int src, int dest);    
+            Edge* getEdge(unsigned int src, unsigned int dest);    
             string print_road(Edge &edge, string preview);     
     };
 }

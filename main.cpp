@@ -30,6 +30,7 @@ int main() {
     ariel::Player p3("Shir");
     vector<Player*> players = {&p1, &p2, &p3};
     ariel::Catan catan(p1, p2, p3);
+    Spot spot;
 
     for(unsigned int i=0; i<=2; i++){
         catan.printBoard();

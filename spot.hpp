@@ -21,7 +21,7 @@ namespace ariel {
     public:
         Spot();
         ~Spot();
-        void setSpot(vector<string> type, vector<unsigned int> num, vector<unsigned int> neighbors);
+        void setSpot(vector<string> type, vector<unsigned int> num, vector<unsigned int> neighbors, unsigned int id);
         void set_owner(string new_owner);
         string get_owner();
         void set_id(unsigned int new_id);

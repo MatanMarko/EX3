@@ -28,66 +28,66 @@ namespace ariel {
 
         vector<string> resources =         {"Ore", "Wool", "Lumber",
                                         "Grain", "Brick", "Wool", "Brick",
-                                    "Grain", "Lumber", "Deseert", "Lumber", "Ore",
+                                    "Grain", "Lumber", "Desert", "Lumber", "Ore",
                                          "Lumber", "Ore", "Grain", "Wool",
                                              "Brick", "Grain", "Wool"};
 
-        //Create the spots on each Tile of the board.
-        //(resources, numbers, neighbor-spots, spot-number)
-        spots[0].setSpot({resources[0]}, {10}, {3,4}, 0);
-        spots[1].setSpot({resources[1]}, {2}, {4,5}, 1);
-        spots[2].setSpot({resources[2]}, {9}, {5,6}, 2);
-        spots[3].setSpot({resources[0]}, {10}, {0,7}, 3);
-        spots[4].setSpot({resources[0], resources[1]}, {10, 2}, {0,1,8}, 4);
-        spots[5].setSpot({resources[1], resources[2]}, {2, 9}, {1,2,9}, 5);
-        spots[6].setSpot({resources[2]}, {9}, {2,10}, 6);
-        spots[7].setSpot({resources[3], resources[0]}, {12, 10}, {3,11,12}, 7);
-        spots[8].setSpot({resources[4], resources[1], resources[0]}, {6, 10, 2}, {4,12,13}, 8);
-        spots[9].setSpot({resources[5], resources[2], resources[1]}, {4, 9, 2}, {5,13,14}, 9);
-        spots[10].setSpot({resources[6], resources[2]}, {10,9}, {6,14,15}, 10);
-        spots[11].setSpot({resources[3]}, {12}, {7,16}, 11);
-        spots[12].setSpot({resources[0], resources[3], resources[4]}, {10, 12, 6}, {7,8,17}, 12);
-        spots[13].setSpot({resources[1], resources[4], resources[5]}, {2, 6, 4}, {8,9,18}, 13);
-        spots[14].setSpot({resources[2], resources[5], resources[6]}, {9, 4, 10}, {9,10,19}, 14);
-        spots[15].setSpot({resources[6]}, {10}, {10,20}, 15);
-        spots[16].setSpot({resources[7], resources[3]}, {9, 12}, {11,21,22}, 16);
-        spots[17].setSpot({resources[8], resources[4], resources[3]}, {11, 6, 12}, {12,22,23}, 17);
-        spots[18].setSpot({resources[9], resources[5], resources[4]}, {0, 4, 6}, {13,23,24}, 18);
-        spots[19].setSpot({resources[10], resources[6], resources[5]}, {3, 10, 4}, {14,24,25}, 19);
-        spots[20].setSpot({resources[11], resources[6]}, {8, 10}, {15,25,26}, 20);
-        spots[21].setSpot({resources[7]}, {9}, {16,27}, 21);
-        spots[22].setSpot({resources[3], resources[7], resources[8]}, {12, 9, 11}, {16,17,28}, 22);
-        spots[23].setSpot({resources[4], resources[8], resources[9]}, {6, 11}, {17,18,29}, 23);
-        spots[24].setSpot({resources[5], resources[9], resources[10]}, {4, 3, 0}, {18,19,30}, 24);
-        spots[25].setSpot({resources[6], resources[10], resources[11]}, {10, 3, 8}, {19,20,31}, 25);
-        spots[26].setSpot({resources[11]}, {8}, {20,32}, 26);
-        spots[27].setSpot({resources[7]}, {9}, {21,33}, 27);
-        spots[28].setSpot({resources[12], resources[7], resources[8]}, {8, 11, 9}, {22,33,34}, 28);
-        spots[29].setSpot({resources[13], resources[9], resources[8]}, {3, 11, 0}, {23,34,35}, 29);
-        spots[30].setSpot({resources[14], resources[10], resources[9]}, {4, 3, 0}, {24,35,36}, 30);
-        spots[31].setSpot({resources[15], resources[11], resources[10]}, {5, 8, 3}, {25,36,37}, 31);
-        spots[32].setSpot({resources[11]}, {8}, {26,37}, 32);
-        spots[33].setSpot({resources[7], resources[12]}, {9, 8}, {27,28,38}, 33);
-        spots[34].setSpot({resources[8], resources[12], resources[13]}, {11, 8, 3}, {28,29,39}, 34);
-        spots[35].setSpot({resources[9], resources[13], resources[14]}, {3, 0, 4}, {29,30,40}, 35);
-        spots[36].setSpot({resources[10], resources[14], resources[15]}, {4, 3, 5}, {30,31,41}, 36);
-        spots[37].setSpot({resources[11], resources[15]}, {5, 8}, {31,32,42}, 37);
-        spots[38].setSpot({resources[12]}, {8}, {33,43}, 38);
-        spots[39].setSpot({resources[16], resources[13], resources[12]}, {5, 3, 8}, {34,43,44}, 39);
-        spots[40].setSpot({resources[17], resources[14], resources[13]}, {6, 4, 3}, {35,44,45}, 40);
-        spots[41].setSpot({resources[18], resources[15], resources[14]}, {11, 5, 4}, {36,45,46}, 41);
-        spots[42].setSpot({resources[15]}, {5}, {37,46}, 42);
-        spots[43].setSpot({resources[12], resources[16]}, {8, 5}, {38,39,47}, 43);
-        spots[44].setSpot({resources[13], resources[16], resources[17]}, {3, 5, 6}, {39,40,48}, 44);
-        spots[45].setSpot({resources[14], resources[17], resources[18]}, {4, 6, 11}, {40,41,49}, 45);
-        spots[46].setSpot({resources[15], resources[18]}, {5, 11}, {41,42,50}, 46);
-        spots[47].setSpot({resources[16]}, {5}, {43,51}, 47);
-        spots[48].setSpot({resources[16], resources[17]}, {5, 6}, {44,51,52}, 48);
-        spots[49].setSpot({resources[17], resources[18]}, {6, 11}, {45,52,53}, 49);
-        spots[50].setSpot({resources[18]}, {11}, {46,53}, 50);
-        spots[51].setSpot({resources[16]}, {5}, {47,48}, 51);
-        spots[52].setSpot({resources[17]}, {6}, {48,49}, 52);
-        spots[53].setSpot({resources[18]}, {11}, {49,50}, 53);
+
+        spots[0].setSpot({"Ore"}, {10}, {3,4}, 0);
+        spots[1].setSpot({"Wool"}, {2}, {4,5}, 1);
+        spots[2].setSpot({"Lumber"}, {9}, {5,6}, 2);
+        spots[3].setSpot({"Ore"}, {10}, {0,7}, 3);
+        spots[4].setSpot({"Ore", "Wool"}, {10, 2}, {0,1,8}, 4);
+        spots[5].setSpot({"Wool", "Lumber"}, {2, 9}, {1,2,9}, 5);
+        spots[6].setSpot({"Lumber"}, {9}, {2,10}, 6);
+        spots[7].setSpot({"Grain", "Ore"}, {12, 10}, {3,11,12}, 7);
+        spots[8].setSpot({"Brick", "Ore", "Wool"}, {6, 10, 2}, {4,12,13}, 8);
+        spots[9].setSpot({"Wool", "Wool", "Lumber"}, {4, 2, 9}, {5,13,14}, 9);
+        spots[10].setSpot({"Brick", "Lumber"}, {10,9}, {6,14,15}, 10);
+        spots[11].setSpot({"Grain"}, {12}, {7,16}, 11);
+        spots[12].setSpot({"Ore", "Grain", "Brick"}, {10, 12, 6}, {7,8,17}, 12);
+        spots[13].setSpot({"Wool", "Brick", "Wool"}, {2, 6, 4}, {8,9,18}, 13);
+        spots[14].setSpot({"Lumber", "Wool", "Brick"}, {9, 4, 10}, {9,10,19}, 14);
+        spots[15].setSpot({"Brick"}, {10}, {10,20}, 15);
+        spots[16].setSpot({"Grain", "Grain"}, {9, 12}, {11,21,22}, 16);
+        spots[17].setSpot({"Lumber", "Grain", "Brick"}, {11, 12, 6}, {12,22,23}, 17);
+        spots[18].setSpot({"Desert", "Brick", "Wool"}, {0, 6, 4}, {13,23,24}, 18);
+        spots[19].setSpot({"Lumber", "Wool", "Brick"}, {3, 4, 10}, {14,24,25}, 19);
+        spots[20].setSpot({"Ore", "Brick"}, {8, 10}, {15,25,26}, 20);
+        spots[21].setSpot({"Grain"}, {9}, {16,27}, 21);
+        spots[22].setSpot({"Grain", "Grain", "Lumber"}, {12, 9, 11}, {16,17,28}, 22);
+        spots[23].setSpot({"Brick", "Lumber", "Desert"}, {6, 11, 0}, {17,18,29}, 23);
+        spots[24].setSpot({"Lumber", "Wool", "Desert"}, {3, 4, 0}, {18,19,30}, 24);
+        spots[25].setSpot({"Lumber", "Brick", "Ore"}, {3, 10, 8}, {19,20,31}, 25);
+        spots[26].setSpot({"Ore"}, {8}, {20,32}, 26);
+        spots[27].setSpot({"Grain"}, {9}, {21,33}, 27);
+        spots[28].setSpot({"Lumber", "Grain", "Lumber"}, {8, 9, 11}, {22,33,34}, 28);
+        spots[29].setSpot({"Ore", "Lumber", "Desert"}, {3, 11, 0}, {23,34,35}, 29);
+        spots[30].setSpot({"Grain", "Lumber", "Desert"}, {4, 3, 0}, {24,35,36}, 30);
+        spots[31].setSpot({"Wool", "Lumber", "Ore"}, {5, 3, 8}, {25,36,37}, 31);
+        spots[32].setSpot({"Ore"}, {8}, {26,37}, 32);
+        spots[33].setSpot({"Lumber", "Grain"}, {8, 9}, {27,28,38}, 33);
+        spots[34].setSpot({"Ore", "Lumber", "Lumber"}, {3, 8, 11}, {28,29,39}, 34);
+        spots[35].setSpot({"Grain", "Ore", "Desert"}, {4, 3, 0}, {29,30,40}, 35);
+        spots[36].setSpot({"Lumber", "Wool", "Grain"}, {3, 4, 5}, {30,31,41}, 36);
+        spots[37].setSpot({"Ore", "Wool"}, {8, 5}, {31,32,42}, 37);
+        spots[38].setSpot({"Lumber"}, {8}, {33,43}, 38);
+        spots[39].setSpot({"Brick", "Lumber", "Ore"}, {5, 8, 3}, {34,43,44}, 39);
+        spots[40].setSpot({"Grain", "Ore", "Grain"}, {6, 3, 4}, {35,44,45}, 40);
+        spots[41].setSpot({"Wool", "Grain", "Wool"}, {11, 4, 5}, {36,45,46}, 41);
+        spots[42].setSpot({"Wool"}, {5}, {37,46}, 42);
+        spots[43].setSpot({"Lumber", "Brick"}, {8, 5}, {38,39,47}, 43);
+        spots[44].setSpot({"Brick", "Grain", "Ore"}, {5, 6, 3}, {39,40,48}, 44);
+        spots[45].setSpot({"Grain", "Grain", "Wool"}, {4, 6, 11}, {40,41,49}, 45);
+        spots[46].setSpot({"Wool", "Wool"}, {5, 11}, {41,42,50}, 46);
+        spots[47].setSpot({"Brick"}, {5}, {43,51}, 47);
+        spots[48].setSpot({"Brick", "Grain"}, {5, 6}, {44,51,52}, 48);
+        spots[49].setSpot({"Grain", "Wool"}, {6, 11}, {45,52,53}, 49);
+        spots[50].setSpot({"Wool"}, {11}, {46,53}, 50);
+        spots[51].setSpot({"Brick"}, {5}, {47,48}, 51);
+        spots[52].setSpot({"Grain"}, {6}, {48,49}, 52);
+        spots[53].setSpot({"Wool"}, {11}, {49,50}, 53);
+
 
 
         edges = {Edge(spots[0], spots[3]), Edge(spots[0], spots[4]), Edge(spots[4], spots[1]), Edge(spots[1], spots[5]), Edge(spots[5], spots[2]), Edge(spots[2], spots[6]),

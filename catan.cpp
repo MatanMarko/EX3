@@ -20,12 +20,12 @@ namespace ariel
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    int chooseStartingPlayer() {
+    void Catan::chooseStartingPlayer() {
     // Return a random number between 1 and 3
     srand(static_cast<unsigned int>(time(0)));
-    int startPlayer = (rand() % 3) + 1;
+    int startPlayer = (rand() % 3);
     cout << "Starting player is: " << startPlayer << endl;
-    return startPlayer;
+    this->turn = startPlayer;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -36,16 +36,16 @@ namespace ariel
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    Player& Catan::getPlayer(int playerNumber){
+    Player& Catan::getPlayer(int playerNumber){     // Return a reference to the player by the player number
         return *players[playerNumber-1];
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    bool Catan::placeSettlement(Player& p){
+    bool Catan::placeSettlement(Player& p){     // Place a settlement on the board
         if(*players[turn] != p){
             cout << "Wait your turn " << p.getName() << endl;
-            cout << "It's your turn " << players[turn]->getName() << endl;
+            cout << "Now it's " << players[turn]->getName() << endl;
             return false;
         }
         if(p.getResource("Lumber") < 1 || p.getResource("Brick") < 1 || p.getResource("Grain") < 1 || p.getResource("Wool") < 1){
@@ -56,6 +56,9 @@ namespace ariel
         while(true){
             bool available = true;
             cin >> spot;
+            if (spot == -1){ 
+                cout << "You decided not to build the settlement" << endl;
+                return false; }
             if(spot >= 0 && spot <= 53){
                 if(board.getSpot(spot).get_owner() == ""){
                     vector<unsigned int> neighbors = board.getSpot(spot).getNeighbors();
@@ -70,11 +73,17 @@ namespace ariel
                 } else{ cout << "There's already a settlement" << endl;}
             } else { cout << "You are out of bounds (0-53)" << endl; }
         }
-        p.settlemenet_resources();
-        board.setOwner(spot, p.getColor());
-        board.getSpot(spot).changeType("Settlement");
-        p.addPoints(1);
-        return true;
+        p.settlemenet_resources();      // Remove the resources from the player
+        board.setOwner(spot, p.getColor());     // Set the owner of the spot to the player's color
+        board.getSpot(spot).changeType("Settlement");       // Change the spot's type to settlement
+        p.addPoints(1);     // Add a point to the player
+        p.addSettlement();  // Add a settlement to the player
+        
+        if(p.getSettlements() == 2 && p.getCities() == 0){    // If the player has placed two settlements, distribute resources
+            firstDistribution(spot, p);
+        }
+
+        return true;    // Return true if the settlement was placed successfully
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,14 +100,26 @@ namespace ariel
         }
         unsigned int src, dst;
         while(true){
-            cin >> src >> dst;
-            if (src == -1 || dst == -1){ 
+            cin >> src;
+            if (cin.fail()){    //check if the input isn't int type
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Invalid input. Please enter a number" << endl;
+                continue;
+            }
+            if (src == -1){ 
                 cout << "You decided not to build the road" << endl;
                 return false; }
-            // cin >> dst;
-            // if (src == -1){
-            //     cout << "You decided not to build the road" << endl;
-            //     return false; }
+            cin >> dst;
+            if (cin.fail()){        // Check if the input isn't an integer
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Invalid input. Please enter a number" << endl;
+                continue;
+            }
+            if (src == -1){
+                cout << "You decided not to build the road" << endl;
+                return false; }
     
             if(src < 0 || src > 53 || dst < 0 || dst > 53){
                 cout << "No such spot" << endl;
@@ -173,6 +194,7 @@ namespace ariel
             }
             break;
         }
+        p.addRoad();    // Add a road to the player
         return true;
     }
 
@@ -181,19 +203,66 @@ namespace ariel
     void Catan::endTurn()
     {
         turn = (turn + 1) % 3;
-        cout << "It's " << getPlayer(turn + 1).getName() << "'s turn." << endl;
+        players[turn]->playedDevCard = false;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    int Catan::checkForWinner(){
+    bool Catan::checkForWinner(){
+        //check if there is a player with the most roads and if he has more than 5 roads
+        int mostRoads = 0;
+        int mostRoadsPlayer = 0;
         for (unsigned int i=0; i<players.size(); i++){
-            if (players[i]->getPoints() >= 10){
-                cout << players[i]->getName() << " has won the game!" << endl;
-                return i+1;
+            if (players[i]->getRoadsNum() > mostRoads){
+                mostRoads = players[i]->getRoadsNum();
+                mostRoadsPlayer = i;
             }
         }
-        return 0;
+        if (mostRoads >= 5){
+            if (players[mostRoadsPlayer]->getHasLongestRoad() == false){
+                for (unsigned int i=0; i<players.size(); i++){
+                    if (players[i]->getHasLongestRoad() == true){
+                        players[i]->setLongestRoad(false);
+                        players[i]->addPoints(-2);
+                    }
+                }
+                players[mostRoadsPlayer]->setLongestRoad(true);
+                players[mostRoadsPlayer]->addPoints(2);
+                cout << "!!!!!!!!! " << players[mostRoadsPlayer]->getName() << " has the longest road !!!!!!!!" << endl;
+            }
+            
+        }
+
+        //check if there is a player with the most knights and if he has more than 2 knights
+        int mostKnights = 0;
+        int mostKnightsPlayer = 0;
+        for (unsigned int i=0; i<players.size(); i++){
+            if (players[i]->getKnights() > mostKnights){
+                mostKnights = players[i]->getKnights();
+                mostKnightsPlayer = i;
+            }
+        }
+        if (mostKnights >= 3){
+            if (players[mostKnightsPlayer]->getHasLargestArmy() == false){
+                for (unsigned int i=0; i<players.size(); i++){
+                    if (players[i]->getHasLargestArmy() == true){
+                        players[i]->setLargestArmy(false);
+                        players[i]->addPoints(-2);
+                    }
+                }
+                players[mostKnightsPlayer]->setLargestArmy(true);
+                players[mostKnightsPlayer]->addPoints(2);
+                cout << "!!!!!!!!! " << players[mostKnightsPlayer]->getName() << " has the largest army !!!!!!!!" << endl;
+            }
+        }
+
+        for (unsigned int i=0; i<players.size(); i++){      // Check if any player has 10 points
+            if (players[i]->getPoints() >= 10){
+                cout << players[i]->getName() << " has won the game!" << endl;
+                return true;
+            }
+        }
+        return false;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -212,16 +281,15 @@ namespace ariel
         int dice1 = (rand() % 6) + 1;
         int dice2 = (rand() % 6) + 1;
         int sum = dice1 + dice2;
-        cout << "Dice roll: " << sum << endl;
-        resourceDistribution(sum);
-        cout << getPlayer(this->turn).getName()<< " has rolled " << sum << endl;
+        if (sum != 7) {resourceDistribution(sum);}
+        cout << getPlayer(turn + 1).getName()<< " has rolled " << sum << endl;
         return sum;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     void Catan::printResources(Player& p){
-        cout << p.getName() << " has:" << endl;
+        cout << p.getName() << " has:\n" << endl;
         p.printResources();
     }
 
@@ -229,16 +297,16 @@ namespace ariel
 
     void Catan::resourceDistribution(int dice){
         // Distribute resources to the players based on the dice roll
-        for(unsigned int i=0; i<=53; i++){
+        for(unsigned int i=0; i<54; i++){
             string spotResouce = board.getSpot(i).dice_hit(dice);
             if(spotResouce!="none"){
                 for(unsigned int j=0; j<3; j++){
-                    if(board.getSpot(i).get_owner() == getPlayer(j).getName()){
-                        if(spotResouce == "Lumber"){ getPlayer(j).addResource("Lumber"); }
-                        if(spotResouce == "Brick"){ getPlayer(j).addResource("Brick"); }
-                        if(spotResouce == "Wool"){ getPlayer(j).addResource("Wool"); }
-                        if(spotResouce == "Ore"){ getPlayer(j).addResource("Ore"); }
-                        if(spotResouce == "Grain"){ getPlayer(j).addResource("Grain"); }
+                    if(board.getSpot(i).get_owner() == getPlayer(j + 1).getColor()){
+                        if(spotResouce == "Lumber"){ getPlayer(j + 1).addResource("Lumber"); }
+                        if(spotResouce == "Brick"){ getPlayer(j + 1).addResource("Brick"); }
+                        if(spotResouce == "Wool"){ getPlayer(j + 1).addResource("Wool"); }
+                        if(spotResouce == "Ore"){ getPlayer(j + 1).addResource("Ore"); }
+                        if(spotResouce == "Grain"){ getPlayer(j + 1).addResource("Grain"); }
                     }
                 }
             }
@@ -363,6 +431,8 @@ namespace ariel
                 }
                 string resource = getPlayer(playerNumber).getRobbed();
                 p.addResource(resource);
+                p.playedDevCard = true;
+                p.addKnight();
                 return true;
             }
 
@@ -372,6 +442,7 @@ namespace ariel
                 cout << "You have used a road building card, place two roads" << endl;
                 placeRoad(p);
                 placeRoad(p);
+                p.playedDevCard = true;
                 return true;
             }
 
@@ -388,6 +459,7 @@ namespace ariel
                 p.getDevCards()["Year of plenty"]--;
                 p.addResource(resource1);
                 p.addResource(resource2);
+                p.playedDevCard = true;
                 return true;
             }
 
@@ -408,6 +480,7 @@ namespace ariel
                     }
                 }
                 p.getDevCards()["Monopoly"]--;
+                p.playedDevCard = true;
                 return true;
             }
         }
@@ -427,6 +500,10 @@ namespace ariel
             cout<< "not enough resources" << endl;
             return false;
         }
+        if (p.getCities() == 4){
+            cout << "You can't build more than 4 cities" << endl;
+            return false;
+        }
 
         unsigned int spot;
         while(true){
@@ -441,12 +518,140 @@ namespace ariel
                     p.setResource("Ore", p.getResource("Ore") - 3);
                     p.setResource("Grain", p.getResource("Grain") - 2);
                     p.addPoints(1);
+                    p.addCity();
                     return true;
                 } else{ cout << "You don't own this spot" << endl;}
             } else { cout << "You are out of bounds (0-53)" << endl; }
         }
         return false;
     }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    void Catan::rob(Player* p) {
+    cout << "Choose a player to rob" << endl;
+    int playerNumber;
+
+        while (true) {
+            if (!(cin >> playerNumber)) {
+                // If the input is not an integer, clear the error flag and ignore the input
+                cout << "Invalid input. Please enter a valid player number (1-3)." << endl;
+                cin.clear(); // Clear the error flag
+                cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignore the rest of the line
+                continue;
+            }
+
+            if (playerNumber < 1 || playerNumber > 3) {
+                cout << "No such player" << endl;
+                continue;
+            }
+
+            if (playerNumber == p->getNumber()) {
+                cout << "You can't choose yourself" << endl;
+                continue;
+            }
+
+            string resource = getPlayer(playerNumber).getRobbed(); // Rob the chosen player
+            p->addResource(resource);   // Add the resource to the player who rolled the dice
+            break;
+        }
+    }
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    void Catan::tradePlayer(Player& p){     // Trade resources with another player
+    if(*players[turn] != p){
+        cout << "Wait your turn " << p.getName() << endl;
+        cout << "It's your turn " << players[turn]->getName() << endl;
+        return;
+    }
+
+    cout << "Choose a player to trade with" << endl;
+    int playerNumber;
+        if (!(cin >> playerNumber)) {
+            // If the input is not an integer, clear the error flag and ignore the input
+            cout << "Invalid input. Please enter a valid player number (1-3)." << endl;
+            cin.clear(); // Clear the error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignore the rest of the line
+            return;
+        }
+
+        if (playerNumber < 1 || playerNumber > 3) {
+            cout << "No such player" << endl;
+            return;
+        }
+
+        if (playerNumber == p.getNumber()) {
+            cout << "You can't choose yourself" << endl;
+            return;
+        }
+
+        cout << "Choose a resource to give" << endl;
+        string resource1;
+        cin >> resource1;
+
+        if (resource1 != "Lumber" && resource1 != "Brick" && resource1 != "Wool" && resource1 != "Ore" && resource1 != "Grain") {
+            cout << "No such resource" << endl;
+            return;
+        }
+
+        cout << "Choose a resource to get" << endl;
+        string resource2;
+        cin >> resource2;
+
+        if (resource2 != "Lumber" && resource2 != "Brick" && resource2 != "Wool" && resource2 != "Ore" && resource2 != "Grain") {
+            cout << "No such resource" << endl;
+            return;
+        }
+
+        cout << "How many " << resource1 << " do you want to give?" << endl;
+        int amount1;
+        cin >> amount1;
+
+        if (amount1 < 0 || amount1 > p.getResource(resource1)) {
+            cout << "Invalid amount" << endl;
+            return;
+        }
+
+        cout << "How many " << resource2 << " do you want to get?" << endl;
+        int amount2;
+        cin >> amount2;
+        if (amount2 < 0) {
+            cout << "Invalid amount" << endl;
+            return;
+        }
+
+        if (amount1 == 0 && amount2 == 0) {
+            cout << "You can't trade nothing" << endl;
+            return;
+        }
+
+        if (getPlayer(playerNumber).getResource(resource2) < amount2) {
+            cout << "The other player doesn't have enough resources" << endl;
+            return;
+        }
+        cout << getPlayer(playerNumber).getName() << ", do you agree to get " << amount2 << " " << resource2 << " for " << amount1 << " " << resource1 << "?" << endl;
+        cout << "1 = Yes, 0 = No" << endl;
+        int answer;
+        cin >> answer;
+        if (answer != 1 && answer != 0) {
+            cout << "Invalid input" << endl;
+            return;
+        }
+        if (answer == 0) {
+            cout << "Trade canceled" << endl;
+            return;
+        }
+
+        cout << "Trade accepted" << endl;
+
+        p.setResource(resource1, p.getResource(resource1) - amount1);
+        p.setResource(resource2, p.getResource(resource2) + amount2);
+        getPlayer(playerNumber).setResource(resource1, getPlayer(playerNumber).getResource(resource1) + amount1);
+        getPlayer(playerNumber).setResource(resource2, getPlayer(playerNumber).getResource(resource2) - amount2);
+        return;  
+    
+    }
+
 
     
 } // namespace ariel;

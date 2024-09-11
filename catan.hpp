@@ -23,7 +23,7 @@ namespace ariel
         Catan(Player& p1, Player& p2, Player& p3);     //constructor
         ~Catan();                                   //destructor
 
-        int chooseStartingPlayer();
+        void chooseStartingPlayer();
         Board getBoard();
         Player& getPlayer(int playerNumber);
         
@@ -31,7 +31,7 @@ namespace ariel
         bool placeRoad(Player& p);
         bool buildCity(Player& p);
 
-        int checkForWinner();
+        bool checkForWinner();
         void printPoints();
         void addPoints(Player& p, int points);
 
@@ -49,6 +49,9 @@ namespace ariel
 
         void endTurn();
         int getTurn() { return turn; }
+        void rob(Player* p);
+
+        void tradePlayer(Player& p);
         
     };
 } // namespace ariel

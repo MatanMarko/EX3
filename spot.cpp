@@ -25,7 +25,7 @@ namespace ariel {
         else if (this->resources[i] == "Lumber") { return "🪵" + to_string(numbers[i]); }
         else if (this->resources[i] == "Grain") { return "🌾" + to_string(numbers[i]); }
         else if (this->resources[i] == "Brick") { return "🧱" + to_string(numbers[i]); }
-        else if (this->resources[i] == "Deseert") { return "\033[38;5;94mDESERT\033[0m"; }
+        else if (this->resources[i] == "Desert") { return "\033[38;5;94mDESERT\033[0m"; }
         else { return " "; }
     }
 
@@ -57,6 +57,9 @@ namespace ariel {
     }
 
     string Spot::dice_hit(unsigned int dice) {
+        if (numbers.size() != resources.size()) {
+            throw std::logic_error("Mismatch between numbers and resources sizes");
+        }
         for (unsigned int i = 0; i < numbers.size(); i++) {
             if (numbers[i] == dice) {
                 return resources[i];

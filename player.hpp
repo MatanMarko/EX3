@@ -20,6 +20,7 @@ namespace ariel
         map<string, int> resources;
         map<string, int> developmentCards;
         int settlements;
+        int cities;
         int roads;
         int knights;
         bool hasLongestRoad;
@@ -60,6 +61,20 @@ namespace ariel
         string toIcon(string resource);
         string getRobbed();
         int getKnights() { return knights; }
+
+        void addKnight() { knights++; }
+        void addSettlement() { settlements++; }
+        void addCity() { settlements--; cities++; }
+
+        bool getHasLongestRoad() { return hasLongestRoad; }
+        void setLongestRoad(bool b) { hasLongestRoad = b; }
+        bool getHasLargestArmy() { return hasLargestArmy; }
+
+        void setLargestArmy(bool b) { hasLargestArmy = b; }
+        int getSettlements() { return settlements; }
+        int getCities() { return cities; }
+
+        bool tradeBank();
         
 
         //operator overloading:

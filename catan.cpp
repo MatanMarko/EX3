@@ -178,14 +178,10 @@ namespace ariel
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // void Catan::endTurn(){
-    //     this->turn = (this->turn + 1) % 3;
-    //     cout << "\nIt's " << getPlayer(this->turn).getName() << "'s turn." << endl;
-    // }
-
     void Catan::endTurn()
     {
         turn = (turn + 1) % 3;
+        cout << "It's " << getPlayer(turn + 1).getName() << "'s turn." << endl;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////

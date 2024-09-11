@@ -19,17 +19,13 @@ namespace ariel {
         this->id = id;
     }
 
-    // string Spot::get_resource(unsigned int i) {
-    //     return this->resources[i];
-    // }
-
     string Spot::get_resource(unsigned int i) {
         if (this->resources[i] == "Ore") { return "🪨" + to_string(numbers[i]); }
         else if (this->resources[i] == "Wool") { return "🐑" + to_string(numbers[i]); }
         else if (this->resources[i] == "Lumber") { return "🪵" + to_string(numbers[i]); }
         else if (this->resources[i] == "Grain") { return "🌾" + to_string(numbers[i]); }
         else if (this->resources[i] == "Brick") { return "🧱" + to_string(numbers[i]); }
-        else if (this->resources[i] == "Deseert") { return "\033[0;33mDESERT\033[0m"; }
+        else if (this->resources[i] == "Deseert") { return "\033[38;5;94mDESERT\033[0m"; }
         else { return " "; }
     }
 
@@ -45,22 +41,16 @@ namespace ariel {
         this->id = new_id;
     }
 
-    // std::ostream& operator<<(std::ostream& os, Spot& spot) {
-    //     string spaces = "    ";
-    //     if(spot.id < 10){ spaces = "     "; }
-    //     os << spot.owner << "("<<to_string(spot.id)<<")" << DEFAULT << spaces;
-    //     return os;
-    // }
-
-    /// ⌂ for settlement and ⛫ for city
     std::ostream& operator<<(std::ostream& os, Spot& spot) {
         string spaces = "    ";
         if(spot.id < 10){ spaces = "     "; }
         if (spot.owner != "" && spot.type == "Settlement") {
-            os << spot.owner << "(⌂"<<to_string(spot.id)<<")" << DEFAULT << "   ";
+            if (spot.id < 10) { os << spot.owner << "(⌂"<<to_string(spot.id)<<")" << DEFAULT << "    "; }
+            else { os << spot.owner << "(⌂"<<to_string(spot.id)<<")" << DEFAULT << "   "; }
         }
         else if (spot.owner != "" && spot.type == "City") {
-            os << spot.owner << "(⛫"<<to_string(spot.id)<<")" << DEFAULT << "   ";
+            if (spot.id < 10) { os << spot.owner << "(⛫"<<to_string(spot.id)<<")" << DEFAULT << "    "; }
+            else { os << spot.owner << "(⛫"<<to_string(spot.id)<<")" << DEFAULT << "   "; }
         }
         else {os << spot.owner << "("<<to_string(spot.id)<<")" << DEFAULT << spaces;}
         return os;

@@ -1,7 +1,3 @@
-Here’s a suggested README for your Catan game project based on the code provided:
-
----
-
 # **Catan Board Game Implementation in C++**
 
 ## **Project Overview**
@@ -92,10 +88,5 @@ The game is interactive, and players will need to input their actions at various
 ## **Author**
 - Matan Markovits
 - Email: matanmarkovits@gmail.com
-
-## **License**
-This project is licensed under the MIT License.
-
----
 
 This README covers all the major aspects of the project, from the setup to gameplay instructions. Let me know if you'd like to adjust any section or add further details!

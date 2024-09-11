@@ -178,9 +178,14 @@ namespace ariel
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void Catan::endTurn(){
-        this->turn = (this->turn + 1) % 3;
-        cout << "\nIt's " << getPlayer(this->turn).getName() << "'s turn." << endl;
+    // void Catan::endTurn(){
+    //     this->turn = (this->turn + 1) % 3;
+    //     cout << "\nIt's " << getPlayer(this->turn).getName() << "'s turn." << endl;
+    // }
+
+    void Catan::endTurn()
+    {
+        turn = (turn + 1) % 3;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -269,7 +274,7 @@ namespace ariel
     void Catan::addPoints(Player& p, int points){
         p.addPoints(points);
         if (checkForWinner() != 0) {
-            this->turn = 4;
+            this->turn = 4; // End the game
         }
     }
 

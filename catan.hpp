@@ -20,7 +20,7 @@ namespace ariel
         vector<string> devCards;
 
     public:
-        Catan(Player p1, Player p2, Player p3);     //constructor
+        Catan(Player& p1, Player& p2, Player& p3);     //constructor
         ~Catan();                                   //destructor
 
         int chooseStartingPlayer();
@@ -36,7 +36,7 @@ namespace ariel
         void addPoints(Player& p, int points);
 
         void shuffleDeck();
-        void rollDice();
+        int rollDice();
         void useDevelopmentCard(int playerNumber, string card);
 
         void printResources(Player& p);
@@ -48,6 +48,7 @@ namespace ariel
         bool useDevelopmentCard(Player& p);
 
         void endTurn();
+        int getTurn() { return turn; }
         
     };
 } // namespace ariel

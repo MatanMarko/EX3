@@ -33,7 +33,7 @@ namespace ariel {
                                              "Brick", "Grain", "Wool"};
 
         //Create the spots on each Tile of the board.
-        //(resources, numbers, neighbor-spots)
+        //(resources, numbers, neighbor-spots, spot-number)
         spots[0].setSpot({resources[0]}, {10}, {3,4}, 0);
         spots[1].setSpot({resources[1]}, {2}, {4,5}, 1);
         spots[2].setSpot({resources[2]}, {9}, {5,6}, 2);

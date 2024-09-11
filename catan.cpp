@@ -4,7 +4,7 @@
 #include "catan.hpp"
 namespace ariel
 {
-    Catan::Catan(Player p1, Player p2, Player p3){
+    Catan::Catan(Player& p1, Player& p2, Player& p3){
         this->board = Board();
         this->players = {&p1, &p2, &p3};
         devCards.insert(devCards.end(), 14, "Knight");
@@ -205,7 +205,7 @@ namespace ariel
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void Catan::rollDice(){
+    int Catan::rollDice(){
         // Return a random number between 1 and 6 twice to keep the dice statistics
         srand(static_cast<unsigned int>(time(0)));
         int dice1 = (rand() % 6) + 1;
@@ -214,6 +214,7 @@ namespace ariel
         cout << "Dice roll: " << sum << endl;
         resourceDistribution(sum);
         cout << getPlayer(this->turn).getName()<< " has rolled " << sum << endl;
+        return sum;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
